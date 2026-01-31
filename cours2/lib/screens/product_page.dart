@@ -161,7 +161,7 @@ class _NovaGroup extends StatelessWidget {
           style: context.theme.title3,
         ),
         const SizedBox(height: 5.0),
-        Text(_findLabel(), style: const TextStyle(color: AppColors.grey2)),
+        Text(_findLabel(), style: context.theme.altText),
       ],
     );
   }
@@ -202,7 +202,7 @@ class _GreenScore extends StatelessWidget {
             Expanded(
               child: Text(
                 _findLabel(),
-                style: const TextStyle(color: AppColors.grey2),
+                style: context.theme.altText,
               ),
             ),
           ],
