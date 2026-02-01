@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../model/product.dart';
+import '../notifiers/product_notifier.dart';
 import '../widgets/product_separator.dart';
 import '../widgets/nutri_score_widget.dart';
 import '../widgets/nova_score_widget.dart';
@@ -15,11 +17,19 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = generateProduct();
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: _ProductPageContent(product: product),
+    return ChangeNotifierProvider(
+      create: (_) => ProductNotifier(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Consumer<ProductNotifier>(
+          builder: (context, productNotifier, _) {
+            if (productNotifier.product == null) {
+              return const _ProductPageLoading();
+            }
+            return _ProductPageContent(product: productNotifier.product!);
+          },
+        ),
+      ),
     );
   }
 }
@@ -56,12 +66,13 @@ class _ProductPageContent extends StatelessWidget {
             child: Stack(
               children: [
                 // Image d'arrière-plan (lien Unsplash)
-                Image.network(
-                  'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=1310&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 200,
-                ),
+                if (product.picture != null)
+                  Image.network(
+                    product.picture!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 200,
+                  ),
                 // Carte qui chevauche l'image
                 Positioned(
                   top: 150,
